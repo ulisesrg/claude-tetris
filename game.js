@@ -14,6 +14,7 @@ const COLORS = [
   '#90caf9', // J - pale blue
   '#ffb74d', // L - orange
   '#b0bec5', // N - tuerca (gris metálico)
+  '#ff5252', // BOMB - bomba roja
 ];
 
 const PIECES = [
@@ -26,9 +27,13 @@ const PIECES = [
   [[6,0,0],[6,6,6],[0,0,0]],                  // J
   [[0,0,7],[7,7,7],[0,0,0]],                  // L
   [[8,8,8],[8,0,8],[8,8,8]],                  // N - tuerca
+  [[9]],                                       // BOMB - power-up 1x1
 ];
 
 const LINE_SCORES = [0, 100, 300, 500, 800];
+const BOMB = 9;
+const BOMB_CHANCE = 0.1;
+const BOMB_CELL_SCORE = 10;
 
 const canvas = document.getElementById('board');
 const ctx = canvas.getContext('2d');
@@ -51,7 +56,9 @@ function createBoard() {
 }
 
 function randomPiece() {
-  const type = Math.floor(Math.random() * (PIECES.length - 1)) + 1;
+  const type = Math.random() < BOMB_CHANCE
+    ? BOMB
+    : Math.floor(Math.random() * (BOMB - 1)) + 1;
   const shape = PIECES[type].map(row => [...row]);
   return { type, shape, x: Math.floor(COLS / 2) - Math.floor(shape[0].length / 2), y: 0 };
 }
@@ -97,6 +104,24 @@ function merge() {
         board[current.y + r][current.x + c] = current.shape[r][c];
 }
 
+function explode(cx, cy) {
+  let destroyed = 0;
+  for (let r = cy - 1; r <= cy + 1; r++) {
+    if (r < 0 || r >= ROWS) continue;
+    for (let c = cx - 1; c <= cx + 1; c++) {
+      if (c < 0 || c >= COLS) continue;
+      if (board[r][c]) {
+        board[r][c] = 0;
+        destroyed++;
+      }
+    }
+  }
+  if (destroyed) {
+    score += destroyed * BOMB_CELL_SCORE * level;
+    updateHUD();
+  }
+}
+
 function clearLines() {
   let cleared = 0;
   for (let r = ROWS - 1; r >= 0; r--) {
@@ -140,7 +165,11 @@ function softDrop() {
 }
 
 function lockPiece() {
-  merge();
+  if (current.type === BOMB) {
+    explode(current.x, current.y);
+  } else {
+    merge();
+  }
   clearLines();
   spawn();
 }
@@ -164,6 +193,31 @@ function drawBlock(context, x, y, colorIndex, size, alpha) {
   if (!colorIndex) return;
   const color = COLORS[colorIndex];
   context.globalAlpha = alpha ?? 1;
+
+  if (colorIndex === BOMB) {
+    const cx = x * size + size / 2;
+    const cy = y * size + size / 2;
+    const radius = size / 2 - 3;
+    context.fillStyle = color;
+    context.beginPath();
+    context.arc(cx, cy, radius, 0, Math.PI * 2);
+    context.fill();
+    // mecha
+    context.strokeStyle = '#ffe082';
+    context.lineWidth = 2;
+    context.beginPath();
+    context.moveTo(cx, cy - radius);
+    context.lineTo(cx + 3, y * size + 2);
+    context.stroke();
+    // brillo
+    context.fillStyle = 'rgba(255,255,255,0.3)';
+    context.beginPath();
+    context.arc(cx - radius * 0.3, cy - radius * 0.3, radius * 0.3, 0, Math.PI * 2);
+    context.fill();
+    context.globalAlpha = 1;
+    return;
+  }
+
   context.fillStyle = color;
   context.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
   // highlight

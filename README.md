@@ -41,6 +41,7 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 - **Vista previa** de la siguiente pieza.
 - **Sistema de puntuación** clásico de Tetris (100 / 300 / 500 / 800 multiplicado por nivel).
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
+- **Power-up bomba**: con ~10% de probabilidad, la pieza generada es una bomba de 1×1; al aterrizar destruye el área 3×3 a su alrededor y suma +10 × nivel por cada bloque destruido.
 - **Pausa** y **Game Over** con opción de reinicio.
 
 ---
