@@ -17,6 +17,7 @@ Implementación del clásico **Tetris** en JavaScript vanilla, usando HTML5 Canv
     - [Opción 1: abrir el archivo directamente](#opción-1-abrir-el-archivo-directamente)
     - [Opción 2: servidor local (recomendado)](#opción-2-servidor-local-recomendado)
   - [Controles](#controles)
+  - [Temas visuales (skins)](#temas-visuales-skins)
   - [Cómo funciona](#cómo-funciona)
     - [1. `index.html`](#1-indexhtml)
     - [2. `style.css`](#2-stylecss)
@@ -43,6 +44,7 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
 - **Power-up bomba**: con ~10% de probabilidad, la pieza generada es una bomba de 1×1; al aterrizar destruye el área 3×3 a su alrededor y suma +10 × nivel por cada bloque destruido.
 - **Pausa** y **Game Over** con opción de reinicio.
+- **Selector de temas visuales (skins)**: cuatro estilos de renderizado distintos, aplicados al instante sin recargar la página, y recordados entre sesiones.
 
 ---
 
@@ -88,6 +90,21 @@ Después abre `http://localhost:8000` en el navegador.
 | `P`       | Pausar / reanudar                 |
 
 El botón junto al título (☀ Claro / ☾ Oscuro) alterna entre el tema oscuro (por defecto) y el claro. La elección no se guarda al recargar la página.
+
+---
+
+## Temas visuales (skins)
+
+Junto al botón de tema claro/oscuro hay un selector (`<select id="skin-select">`) con cuatro estilos de renderizado del tablero y las piezas. El cambio se aplica de inmediato (sin recargar la página) y la elección se guarda en `localStorage` (clave `tetris.skin`), por lo que persiste entre sesiones.
+
+| Skin          | Aspecto                                                                                     |
+| ------------- | -------------------------------------------------------------------------------------------- |
+| **Retro**     | El look clásico original: bloques planos con una franja de brillo superior.                  |
+| **Neón**      | Tablero en negro puro y colores saturados con efecto de resplandor (*glow*) en cada bloque.   |
+| **Pastel**    | Colores suaves y bloques con esquinas redondeadas, sin brillos marcados.                     |
+| **Pixel art** | Bloques con una textura de dither/damero y un borde tipo bisel, look "chunky" retro-pixelado. |
+
+El selector funciona junto con el tema claro/oscuro: cuando un skin no define un color de tablero o de cuadrícula propios (Pastel y Pixel art), se usa el color del tema activo; Neón, en cambio, siempre fuerza un tablero negro para que el resplandor resalte.
 
 ---
 
@@ -179,6 +196,7 @@ Algunos parámetros fáciles de tunear en `game.js`:
 | `COLORS`       | Paleta de colores por tipo de pieza      | 8 colores             |
 | `LINE_SCORES`  | Puntos por 1, 2, 3 o 4 líneas eliminadas | `[0,100,300,500,800]` |
 | `dropInterval` | Velocidad inicial de caída en ms         | `1000`                |
+| `SKINS`        | Temas visuales disponibles (retro/neon/pastel/pixel), cada uno con su paleta `colors` y su función `drawCell` | 4 skins |
 
 > Si cambias `COLS`, `ROWS` o `BLOCK`, recuerda ajustar también `width` y `height` del `<canvas id="board">` en `index.html` para que coincida (`COLS × BLOCK` × `ROWS × BLOCK`).
 
