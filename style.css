@@ -16,6 +16,8 @@
   --danger: #e57373;
   --shadow: rgba(0, 0, 0, 0.6);
   --grid: #22222e;
+  --success: #81c784;
+  --success-bg: rgba(129, 199, 132, 0.18);
 }
 
 [data-theme="light"] {
@@ -35,6 +37,8 @@
   --danger: #c62828;
   --shadow: rgba(0, 0, 0, 0.15);
   --grid: #e1e3ee;
+  --success: #2e7d32;
+  --success-bg: rgba(46, 125, 50, 0.12);
 }
 
 *, *::before, *::after {
@@ -190,6 +194,10 @@ kbd {
   flex-direction: column;
   gap: 12px;
   align-items: center;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  padding: 16px;
 }
 
 #overlay-title {
@@ -205,7 +213,7 @@ kbd {
   color: var(--accent);
 }
 
-#restart-btn {
+.btn-primary {
   margin-top: 8px;
   background: var(--accent);
   color: var(--on-accent);
@@ -219,6 +227,104 @@ kbd {
   transition: background 0.15s;
 }
 
-#restart-btn:hover {
+.btn-primary:hover {
   background: var(--accent-hover);
+}
+
+/* ---- Pantalla de inicio ---- */
+.start-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  color: var(--accent);
+}
+
+.secondary-btn {
+  background: transparent;
+  color: var(--muted-text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.secondary-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* ---- Tabla de records ---- */
+.records {
+  width: 100%;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.records-table {
+  width: 100%;
+  min-width: 240px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.records-table th,
+.records-table td {
+  padding: 4px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.records-table th {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.records-empty {
+  text-align: center;
+  color: var(--muted-text);
+  padding: 12px 0;
+}
+
+.record-highlight {
+  background: var(--success-bg);
+  color: var(--success);
+  font-weight: 700;
+}
+
+.records-stat {
+  font-size: 12px;
+  color: var(--muted-text);
+}
+
+.new-record {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--success);
+  letter-spacing: 1px;
+}
+
+.name-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#name-input {
+  background: var(--panel-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  width: 140px;
+}
+
+#name-input:focus {
+  outline: none;
+  border-color: var(--accent);
 }

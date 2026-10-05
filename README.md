@@ -16,6 +16,7 @@ Implementación del clásico **Tetris** en JavaScript vanilla, usando HTML5 Canv
   - [Cómo ejecutar el juego](#cómo-ejecutar-el-juego)
     - [Opción 1: abrir el archivo directamente](#opción-1-abrir-el-archivo-directamente)
     - [Opción 2: servidor local (recomendado)](#opción-2-servidor-local-recomendado)
+  - [Pantalla de inicio y tabla de records](#pantalla-de-inicio-y-tabla-de-records)
   - [Controles](#controles)
   - [Cómo funciona](#cómo-funciona)
     - [1. `index.html`](#1-indexhtml)
@@ -43,6 +44,8 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
 - **Power-up bomba**: con ~10% de probabilidad, la pieza generada es una bomba de 1×1; al aterrizar destruye el área 3×3 a su alrededor y suma +10 × nivel por cada bloque destruido.
 - **Pausa** y **Game Over** con opción de reinicio.
+- **Pantalla de inicio** con una tabla de mejores puntuaciones guardada localmente y un botón para empezar a jugar.
+- **Tabla de records local** (top 5 por puntuación), combo máximo y líneas máximas conseguidas en una partida, persistidos en el navegador (`localStorage`).
 
 ---
 
@@ -77,6 +80,35 @@ Después abre `http://localhost:8000` en el navegador.
 
 ---
 
+## Pantalla de inicio y tabla de records
+
+Al cargar la página el juego **no arranca automáticamente**: se muestra una pantalla de inicio con:
+
+- El título del juego.
+- La **tabla de los 5 mejores puntajes** guardados (nombre, puntuación, líneas y nivel).
+- El **mejor combo** conseguido (piezas consecutivas que, al encajar, limpian al menos una línea cada una; una pieza que no limpia ninguna línea reinicia el combo a 0).
+- El **máximo de líneas** completadas en una sola partida, de todas las partidas jugadas.
+- Un botón **"Jugar"** que inicia la partida.
+- Un botón **"Borrar records"** que, tras confirmar en un diálogo, borra todos los datos guardados (tabla, mejor combo y máximo de líneas).
+
+Todo se guarda en `localStorage` bajo la clave `tetris.records`, con esta forma:
+
+```json
+{
+  "top": [
+    { "name": "ANA", "score": 12000, "lines": 34, "level": 4, "date": "04/10/26" }
+  ],
+  "bestCombo": 5,
+  "maxLines": 87
+}
+```
+
+Al terminar una partida (**Game Over**), si la puntuación entra en el top 5 (o todavía hay menos de 5 registros guardados), se muestra el mensaje **"¡Nuevo récord!"** junto a un campo de texto (máx. 12 caracteres) para escribir el nombre y un botón **"Guardar"** (también se puede guardar pulsando `Enter` dentro del campo). Tras guardar, la fila nueva se resalta en la tabla. El mejor combo y el máximo de líneas de la partida se actualizan en el almacenamiento siempre, aunque la puntuación no entre en el top 5. El botón **"Reiniciar"** sigue disponible para empezar una nueva partida en cualquier caso.
+
+Mientras el campo de nombre tiene el foco, las teclas del juego (mover, rotar, pausa, etc.) se ignoran para poder escribir con normalidad.
+
+---
+
 ## Controles
 
 | Tecla     | Acción                            |
@@ -101,7 +133,8 @@ Define la estructura visual:
 
 - Un `<canvas id="board">` de **300 × 600** píxeles donde se renderiza el tablero.
 - Un panel lateral con `SCORE`, `LINES`, `LEVEL`, vista de la siguiente pieza y la lista de controles.
-- Un overlay para los estados **PAUSA** y **GAME OVER**.
+- Un overlay (`#overlay`) para los estados **PAUSA** y **GAME OVER**, con la tabla de records, el formulario de nombre y el botón de reinicio.
+- Un overlay independiente (`#start-overlay`), visible al cargar la página, con la tabla de records, el mejor combo, el máximo de líneas y los botones **"Jugar"** / **"Borrar records"**.
 
 ### 2. `style.css`
 
@@ -120,11 +153,16 @@ Contiene toda la lógica del juego. A grandes rasgos:
 - **Puntuación**: usa la tabla clásica `[0, 100, 300, 500, 800]` multiplicada por el nivel actual; el hard drop suma 2 puntos por celda recorrida y el soft drop 1 punto por fila.
 - **Nivel y velocidad**: el nivel sube cada 10 líneas; la velocidad de caída se calcula como `max(100, 1000 − (level − 1) × 90)` milisegundos.
 - **Ghost piece** (`ghostY`): proyecta la posición final de la pieza actual hacia abajo y la dibuja con `globalAlpha = 0.2`.
+- **Combo** (`combo`, `maxComboThisGame`): se incrementa en `clearLines()` cada vez que una pieza al encajar limpia al menos una línea; una pieza que no limpia ninguna lo reinicia a 0. El máximo de la partida se compara contra `bestCombo` en `endGame()`.
+- **Records** (`loadRecords` / `saveRecords`): leen y escriben `localStorage['tetris.records']` envueltos en `try/catch`, con valores por defecto si el almacenamiento falla o no existe.
 
 ### Flujo del juego
 
 ```
-init()
+carga de página
+  └─ renderStartScreen()             → pinta tabla de records en #start-overlay
+
+"Jugar" (#play-btn) → init()
   ├─ createBoard()                  → matriz vacía
   ├─ next = randomPiece()
   ├─ spawn()                        → mueve next a current y genera nueva next
