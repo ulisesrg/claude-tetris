@@ -75,8 +75,6 @@ body {
 }
 
 #theme-toggle {
-  position: absolute;
-  right: 0;
   background: var(--panel-bg);
   color: var(--text);
   border: 1px solid var(--border);
@@ -221,4 +219,28 @@ kbd {
 
 #restart-btn:hover {
   background: var(--accent-hover);
+}
+
+/* ---- Skins ---- */
+.title-bar-controls {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#skin-select {
+  background: var(--panel-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#skin-select:hover {
+  border-color: var(--accent);
 }

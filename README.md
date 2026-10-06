@@ -43,6 +43,7 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
 - **Power-up bomba**: con ~10% de probabilidad, la pieza generada es una bomba de 1×1; al aterrizar destruye el área 3×3 a su alrededor y suma +10 × nivel por cada bloque destruido.
 - **Pausa** y **Game Over** con opción de reinicio.
+- **Skins visuales**: selector junto al título con cuatro estilos — Retro (el look clásico de bloques planos), Neón (fondo negro forzado y brillo `shadowBlur`), Pastel (bloques con esquinas redondeadas) y Pixel art (textura tipo dither). La elección se guarda en `localStorage` y es independiente del tema claro/oscuro.
 
 ---
 
