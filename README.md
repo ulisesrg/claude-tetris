@@ -85,9 +85,20 @@ Después abre `http://localhost:8000` en el navegador.
 | `↑` o `X` | Rotar la pieza en sentido horario |
 | `↓`       | Soft drop (bajar más rápido)      |
 | `Espacio` | Hard drop (caída instantánea)     |
-| `P`       | Pausar / reanudar                 |
+| `P` / `Esc` | Pausar / reanudar (abre el menú de pausa) |
 
 El botón junto al título (☀ Claro / ☾ Oscuro) alterna entre el tema oscuro (por defecto) y el claro. La elección no se guarda al recargar la página.
+
+### Menú de pausa
+
+Al pausar (`P` o `Esc`) se abre un menú con varias opciones:
+
+- **Reanudar** — cierra el menú y continúa la partida en curso.
+- **Reiniciar** — empieza una partida nueva sin recargar la página.
+- **Ver controles** — despliega u oculta la lista de teclas dentro del propio menú.
+- **Nivel inicial** — selector (1–10) para el nivel con el que empezará la **próxima** partida. Se guarda en `localStorage` (clave `tetris.startLevel`) y no afecta a la partida que ya está en marcha.
+
+`P` / `Esc` no hacen nada durante el Game Over. Tampoco mientras el foco está en el selector de nivel inicial (para poder cerrar un `<select>` nativo con Esc sin que además reanude la partida).
 
 ---
 
