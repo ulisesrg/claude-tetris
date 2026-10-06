@@ -51,6 +51,23 @@
       <div class="overlay-box">
         <p id="overlay-title">GAME OVER</p>
         <p id="overlay-score"></p>
+
+        <div id="hiscore-container" class="hiscore-container hidden">
+          <div id="hiscore-name-section" class="hiscore-name-section hidden">
+            <p class="hiscore-prompt">¡Nuevo récord! Introduce tu nombre:</p>
+            <input id="hiscore-name-input" type="text" maxlength="12" placeholder="Jugador" autocomplete="off" />
+            <button id="hiscore-save-btn" type="button">Guardar</button>
+          </div>
+
+          <div id="hiscore-results">
+            <p id="hiscore-new-msg" class="hiscore-new-msg hidden">¡Nuevo récord!</p>
+            <div id="hiscore-table"></div>
+            <p id="hiscore-stats" class="hiscore-stats"></p>
+            <button id="hiscore-clear-btn" type="button" class="hiscore-clear-btn">Borrar récords</button>
+          </div>
+        </div>
+
+        <button id="play-btn" type="button" class="hidden">Jugar</button>
         <button id="restart-btn">Reiniciar</button>
       </div>
     </div>

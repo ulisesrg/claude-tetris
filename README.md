@@ -43,6 +43,7 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
 - **Power-up bomba**: con ~10% de probabilidad, la pieza generada es una bomba de 1×1; al aterrizar destruye el área 3×3 a su alrededor y suma +10 × nivel por cada bloque destruido.
 - **Pausa** y **Game Over** con opción de reinicio.
+- **Tabla de récords local**: pantalla de inicio con el top 5 de puntuaciones (nombre, puntuación y líneas), más el mejor combo y el máximo de líneas conseguidos históricamente. Si al terminar la partida tu puntuación entra en el top 5, se te pide el nombre para guardarla; todo se guarda en `localStorage` del navegador y puede borrarse con el botón "Borrar récords".
 
 ---
 
