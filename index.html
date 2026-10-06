@@ -10,7 +10,11 @@
   <div class="wrapper">
     <div class="title-bar">
       <h1 class="game-title">TETRIS</h1>
-      <button id="theme-toggle" type="button" aria-label="Cambiar a modo claro" aria-pressed="false">☀ Claro</button>
+      <div class="title-bar-controls">
+        <!-- opciones generadas en game.js a partir de SKINS -->
+        <select id="skin-select" aria-label="Elegir skin visual"></select>
+        <button id="theme-toggle" type="button" aria-label="Cambiar a modo claro" aria-pressed="false">☀ Claro</button>
+      </div>
     </div>
     <div class="game-container">
       <canvas id="board" width="300" height="600"></canvas>
